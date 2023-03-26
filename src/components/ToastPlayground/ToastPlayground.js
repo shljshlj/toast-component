@@ -8,8 +8,8 @@ import styles from './ToastPlayground.module.css';
 const VARIANT_OPTIONS = ['notice', 'warning', 'success', 'error'];
 
 function ToastPlayground() {
-  const [toastMessage, setToastMessage] = React.useState('');
-  const [toastVariant, setToastVariant] = React.useState(VARIANT_OPTIONS[0]);
+  const [message, setMessage] = React.useState('');
+  const [variant, setVariant] = React.useState(VARIANT_OPTIONS[0]);
   const [isRendered, setIsRendered] = React.useState(false);
 
   function handleDismiss() {
@@ -41,8 +41,8 @@ function ToastPlayground() {
             <textarea
               id='message'
               className={styles.messageInput}
-              value={toastMessage}
-              onChange={(event) => setToastMessage(event.target.value)}
+              value={message}
+              onChange={(event) => setMessage(event.target.value)}
             />
           </div>
         </div>
@@ -50,19 +50,23 @@ function ToastPlayground() {
         <div className={styles.row}>
           <div className={styles.label}>Variant</div>
           <div className={`${styles.inputWrapper} ${styles.radioWrapper}`}>
-            {VARIANT_OPTIONS.map((variant, idx) => (
-              <label key={idx} htmlFor={`variant-${variant}`}>
-                <input
-                  id={`variant-${variant}`}
-                  type='radio'
-                  name='variant'
-                  value={variant}
-                  checked={toastVariant === variant}
-                  onChange={(event) => setToastVariant(variant)}
-                />
-                {variant}
-              </label>
-            ))}
+            {VARIANT_OPTIONS.map((option) => {
+              const id = `variant-${option}`;
+
+              return (
+                <label key={id} htmlFor={id}>
+                  <input
+                    id={id}
+                    type='radio'
+                    name='variant'
+                    value={option}
+                    checked={variant === option}
+                    onChange={(event) => setVariant(event.target.value)}
+                  />
+                  {option}
+                </label>
+              );
+            })}
           </div>
         </div>
 
