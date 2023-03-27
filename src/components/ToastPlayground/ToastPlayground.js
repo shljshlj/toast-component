@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { ToastContext } from '../ToastProvider';
-
 import Button from '../Button';
 import ToastShelf from '../ToastShelf';
 
@@ -13,6 +12,20 @@ function ToastPlayground() {
   const [message, setMessage] = React.useState('');
   const [variant, setVariant] = React.useState(VARIANT_OPTIONS[0]);
   const { toasts, setToasts } = React.useContext(ToastContext);
+
+  React.useEffect(() => {
+    function handleEscapeKey(event) {
+      if (event.code === 'Escape') {
+        setToasts([]);
+      }
+    }
+
+    window.addEventListener('keydown', handleEscapeKey);
+
+    return () => {
+      window.removeEventListener('keydown', handleEscapeKey);
+    };
+  }, [setToasts]);
 
   function handleCreateToast(event) {
     event.preventDefault();
