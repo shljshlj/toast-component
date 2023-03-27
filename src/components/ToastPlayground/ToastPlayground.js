@@ -9,41 +9,18 @@ import styles from './ToastPlayground.module.css';
 const VARIANT_OPTIONS = ['notice', 'warning', 'success', 'error'];
 
 function ToastPlayground() {
+  const { createToast } = React.useContext(ToastContext);
+
   const [message, setMessage] = React.useState('');
   const [variant, setVariant] = React.useState(VARIANT_OPTIONS[0]);
-  const { toasts, setToasts } = React.useContext(ToastContext);
-
-  React.useEffect(() => {
-    function handleEscapeKey(event) {
-      if (event.code === 'Escape') {
-        setToasts([]);
-      }
-    }
-
-    window.addEventListener('keydown', handleEscapeKey);
-
-    return () => {
-      window.removeEventListener('keydown', handleEscapeKey);
-    };
-  }, [setToasts]);
 
   function handleCreateToast(event) {
     event.preventDefault();
 
-    const newToast = {
-      message,
-      variant,
-      id: crypto.randomUUID(),
-    };
+    createToast(message, variant);
 
     setMessage('');
     setVariant(VARIANT_OPTIONS[0]);
-    setToasts([...toasts, newToast]);
-  }
-
-  function handleDismiss(id) {
-    const nextToasts = toasts.filter((toast) => toast.id !== id);
-    setToasts(nextToasts);
   }
 
   return (
@@ -53,7 +30,7 @@ function ToastPlayground() {
         <h1>Toast Playground</h1>
       </header>
 
-      <ToastShelf handleDismiss={handleDismiss} />
+      <ToastShelf />
 
       <form className={styles.controlsWrapper} onSubmit={handleCreateToast}>
         <div className={styles.row}>
